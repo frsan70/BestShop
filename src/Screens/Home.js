@@ -1,34 +1,59 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Images from "../assets/images/images";
-import refrigerator from "../res/data"; // Importing the data directly
+// import refrigerator from "../res/data"; // Importing the data directly
 import Header from "../components/Header";
+import Products from "../components/Products";
+import { filterTabs } from "../res/filterdata";
+import FilterTabs from "../components/FilterTabs";
+import { ProductsData, refrigerator } from "../res/data";
+import ItemHorzental from "../components/ItemHorzental";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
-const Home = () => {
+
+const Home = (props) => {
   const renderProducts = () => {
-    return refrigerator.map((product, index) => (
-      <View key={index} style={styles.productContainer}>
-        <Image style={styles.productImage} source={product.img} />
-        <Text>{product.name}</Text>
-        <Text>{product.modal}</Text>
-        <Text>{product.price}</Text>
-      </View>
-    ));
+    return ProductsData.map((product, index) => (
+        <ItemHorzental key={index} data={product.data} title={product.name} />
+
+      ))
   };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.menuHeader}>
-        <Image style={styles.image} source={Images.searsh} />
-        <Text style={styles.text}>BEST SHOP</Text>
-        <Image style={styles.image} source={Images.menu} />
-      </View>
-      <ScrollView>
-        {renderProducts()}
+  const renderFilterTabs = () => {
 
+    return (
+
+      <ScrollView style={styles.FilterTabs} horizontal>
+        {filterTabs.map((tab, index) =>
+          <FilterTabs tab={tab} key={index} />
+        )}
 
       </ScrollView>
-    </View>
+
+    )
+
+  }
+  
+    const {index,product} = props;
+    const navigate=useNavigation()
+  const goTo=()=>{
+    navigate.navigate(ScreenNames.ProuductPage,{...product})}
+
+  return (
+    <ImageBackground source={Images.rek3()} resizeMode="cover" style={styles.backgroundimage}>
+    <ScrollView style={styles.container}>
+    <Header/> 
+
+      {renderFilterTabs()}
+
+      {/* <SafeAreaView style={styles.Products} horizontal> */}
+        {renderProducts()}
+      {/* </SafeAreaView> */}
+  
+     </ScrollView>
+     </ImageBackground>
+
   );
 };
 
@@ -36,34 +61,22 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    
     flex: 1,
   },
-  menuHeader: {
-    backgroundColor: 'grey',
-    width: '100%',
-    flexDirection: "row",
-    justifyContent: 'space-around',
-    alignItems: 'center'
+  backgroundimage:{
+    flex:1,
+    justifyContent:"center"
   },
-  text: {
-    fontSize: 24,
-    textAlign: "center",
-    color: "#42eff5",
+  FilterTabs: {
+    flexDirection: 'row',
+    height: 100,
+    marginTop:10
+   
+
   },
-  image: {
-    width: 50,
-    height: 50,
-  },
-  productContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  productImage: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
+  Products: {
+    margin: 7,
+
   },
 });

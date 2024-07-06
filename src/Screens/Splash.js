@@ -24,7 +24,7 @@ export default Splash;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'gray',
     alignItems:'center',
     justifyContent:'center'
   },
